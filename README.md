@@ -1,2 +1,26 @@
 # ansible-role-stress
-Run a stress test on a machine using Ansible
+
+Run a stress test on a machine using Ansible. This role uses
+[stress-ng](http://kernel.ubuntu.com/~cking/stress-ng/) to stress the CPU,
+memory and disk on a system. It installs stress-ng and runs it with
+configurable parameters. Since running a stress test is something that is
+generally done for a long period continuously, screen is used to contain
+stress-ng so that the Ansible run finishes in a timely manner and simply leaves
+stress-ng running in the background.
+
+Requirements
+------------
+
+  * Only tested on CentOS 7, should also work on 6, should be trivial to port for e.g. Ubuntu
+
+Role variables
+--------------
+
+  * test_duration: sets the timeout limit for stress-ng in seconds
+  * Variables to set the number of each type of worker:
+    * cpu_workers
+    * vm_workers
+    * hdd_workers
+  * Variables to set how much memory and disk space to consume per worker
+    * bytes_per_hdd_worker
+    * bytes_per_vm_worker
