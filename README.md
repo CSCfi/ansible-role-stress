@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/CSCfi/ansible-role-stress.svg?branch=master)](https://travis-ci.org/CSCfi/ansible-role-stress)
 # ansible-role-stress
 
 Run a stress test on a machine using Ansible. This role uses

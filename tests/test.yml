@@ -1,0 +1,10 @@
+---
+
+ - name: Playbook for CI testing.
+   hosts: localhost
+   vars:
+       - test_duration: "5"
+
+   roles:
+       - ansible-role-stress
+...
