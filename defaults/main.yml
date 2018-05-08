@@ -14,3 +14,6 @@ hdd_workers: "0"
 # Defaults to 256M for both
 bytes_per_hdd_worker: "256M"
 bytes_per_vm_worker: "256M"
+
+# Temporary/runtime directory for stress-ng
+stress_tmp_dir: /root/stress-tmp
