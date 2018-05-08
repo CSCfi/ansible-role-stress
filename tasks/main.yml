@@ -21,7 +21,7 @@
     creates: '/usr/bin/stress-ng'
 
 - name: create a temp dir for stress to use
-  file: path={{stress_tmp_dir}} state=directory
+  file: path="{{stress_tmp_dir}}" state=directory
 
 - name: run stress-ng
   command: >
@@ -35,7 +35,7 @@
     --cpu {{cpu_workers}}
     --vm {{vm_workers}}
     --hdd {{hdd_workers}}
-    --log-file {{stress_tmp_dir}}
+    --log-file {{stress_tmp_dir}}/stress-ng.log
   args:
-    chdir: {{stress_tmp_dir}}
+    chdir: "{{stress_tmp_dir}}"
     creates: '/var/run/screen/S-root/*.stress'
