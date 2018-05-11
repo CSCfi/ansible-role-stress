@@ -35,7 +35,6 @@
     --cpu {{cpu_workers}}
     --vm {{vm_workers}}
     --hdd {{hdd_workers}}
-    --log-file {{stress_tmp_dir}}/stress-ng.log
+    --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   args:
     chdir: "{{stress_tmp_dir}}"
-    creates: '/var/run/screen/S-root/*.stress'
