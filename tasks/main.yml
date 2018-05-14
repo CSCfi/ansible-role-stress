@@ -23,6 +23,17 @@
 - name: create a temp dir for stress to use
   file: path="{{stress_tmp_dir}}" state=directory
 
+- name: Register screen session
+  find:
+    paths: '/var/run/screen/S-root/'
+    file_type: any
+    patterns: '*.stress'
+  register: screen_files
+
+- name: Fail if existing screen session
+  fail: A stress session is already running
+  when: screen_files.matched == 0
+
 - name: run stress-ng
   command: >
     screen -S stress -d -m
@@ -38,3 +49,4 @@
     --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   args:
     chdir: "{{stress_tmp_dir}}"
+    creates: '/var/run/screen/S-root/*.stress'
