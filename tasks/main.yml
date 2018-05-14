@@ -1,4 +1,16 @@
 ---
+- name: Register screen session
+  find:
+    paths: '/var/run/screen/S-root/'
+    file_type: any
+    patterns: '*.stress'
+  register: screen_files
+
+- name: Fail if existing screen session
+  fail:
+    msg: A stress session is already running. It might be some pending writes to disk.
+  when: screen_files.matched != 0
+
 - name: install dependencies for building stress-ng
   yum: name=libattr-devel,keyutils-libs-devel,make,gcc,tar state=present
 
