@@ -1,4 +1,16 @@
 ---
+- name: Register screen session
+  find:
+    paths: '/var/run/screen/S-root/'
+    file_type: any
+    patterns: '*.stress'
+  register: screen_files
+
+- name: Fail if existing screen session
+  fail:
+    msg: A stress session is already running. It might be some pending writes to disk.
+  when: screen_files.matched != 0
+
 - name: install dependencies for building stress-ng
   yum: name=libattr-devel,keyutils-libs-devel,make,gcc,tar state=present
 
@@ -35,7 +47,6 @@
     --cpu {{cpu_workers}}
     --vm {{vm_workers}}
     --hdd {{hdd_workers}}
-    --log-file {{stress_tmp_dir}}/stress-ng.log
+    --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   args:
     chdir: "{{stress_tmp_dir}}"
-    creates: '/var/run/screen/S-root/*.stress'
