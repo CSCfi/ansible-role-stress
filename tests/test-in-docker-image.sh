@@ -104,10 +104,9 @@ function test_playbook_syntax(){
 
 function test_ansible_lint(){
 
-    if [ "$OS_TYPE" == "lint" ]; then
-      echo "TEST: ansible-lint"
-      ansible-lint $ANSIBLE_YAML_FILES
-    fi
+    echo "TEST: ansible-lint"
+    ansible-lint $ANSIBLE_YAML_FILES ||(echo "ansible-lint syntax check was failed" && exit 2 )
+
 }
 
 function test_playbook_check(){
