@@ -50,15 +50,16 @@
     --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   args:
     chdir: "{{stress_tmp_dir}}"
+  tags: skip_ansible_lint
 
 - name: Get stress-ng process count
   shell: ps -ef|grep "[s]tress-ng"|wc -l
   register: stress_procs
   changed_when: False
   check_mode: False
+  tags: skip_ansible_lint
 
 - name: Fail if no stress-ng processes found
   fail:
     msg: No stress-ng processes found!
   when: stress_procs.stdout < 1
-  tags: skip_ansible_lint
