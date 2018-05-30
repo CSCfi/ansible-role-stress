@@ -8,7 +8,7 @@ RUN yum clean all && \
     yum -y install acl sudo && \
     sed -i -e 's/^Defaults.*requiretty/Defaults    !requiretty/' -e 's/^%wheel.*ALL$/%wheel    ALL=(ALL)    NOPASSWD: ALL/' /etc/sudoers && \
     yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip \
-    pip install pyrax pysphere boto passlib dnspython ansible-lint&& \
+    pip install pyrax pysphere boto passlib dnspython && \
     yum -y remove $(rpm -qa "*-devel") && \
     yum -y groupremove "Development tools" && \
     yum -y autoremove && \
@@ -16,6 +16,6 @@ RUN yum clean all && \
 
 RUN mkdir /etc/ansible/
 RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
-RUN yum -y install ansible
+RUN yum -y install ansible ansible-lint
 
 CMD ["/bin/bash"]
