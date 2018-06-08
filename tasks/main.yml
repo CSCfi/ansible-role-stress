@@ -9,7 +9,7 @@
 - name: Fail if existing screen session
   fail:
     msg: A stress session is already running. It might be some pending writes to disk.
-  when: screen_files.matched != 0 and skip_screen_check == True
+  when: screen_files.matched != 0 and skip_screen_check == False
 
 - name: install dependencies for building stress-ng
   yum: name=libattr-devel,keyutils-libs-devel,make,gcc,tar state=present
