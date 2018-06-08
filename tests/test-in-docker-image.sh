@@ -132,6 +132,11 @@ function extra_tests(){
     ls /etc/puppet/
 
 }
+function test_verification(){
+
+    echo "Check if log file have been created"
+    tail /root/stress-tmp/stress-ng-*log ||(echo "log files does not exist" && exit 2)
+}
 
 set -e
 function main(){
@@ -146,6 +151,7 @@ function main(){
     test_playbook
     test_playbook_check
 #    extra_tests
+    test_verification
 
 }
 
