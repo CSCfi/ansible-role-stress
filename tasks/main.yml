@@ -9,7 +9,7 @@
 - name: Fail if existing screen session
   fail:
     msg: A stress session is already running. It might be some pending writes to disk.
-  when: screen_files.matched != 0
+  when: screen_files.matched != 0 and skip_screen_check == False
 
 - name: install dependencies for building stress-ng
   yum: name=libattr-devel,keyutils-libs-devel,make,gcc,tar state=present
@@ -50,3 +50,16 @@
     --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   args:
     chdir: "{{stress_tmp_dir}}"
+  tags: skip_ansible_lint
+
+- name: Get stress-ng process count
+  shell: ps -ef|grep "[s]tress-ng"|wc -l
+  register: stress_procs
+  changed_when: False
+  check_mode: False
+  tags: skip_ansible_lint
+
+- name: Fail if no stress-ng processes found
+  fail:
+    msg: No stress-ng processes found!
+  when: stress_procs.stdout < 1

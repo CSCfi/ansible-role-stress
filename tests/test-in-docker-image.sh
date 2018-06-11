@@ -15,6 +15,7 @@ ANSIBLE_PLAYBOOk="tests/test.yml"
 #ANSIBLE_LOG_LEVEL=""
 ANSIBLE_LOG_LEVEL="-v"
 APACHE_CTL="apache2ctl"
+ANSIBLE_YAML_FILES="*/*.yml"
 
 # if there wasn't sudo then ansible couldn't use it
 if [ "x$SUDO" == "x" ];then
@@ -101,6 +102,13 @@ function test_playbook_syntax(){
     ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOk} --syntax-check ||(echo "ansible playbook syntax check was failed" && exit 2 )
 }
 
+function test_ansible_lint(){
+
+    echo "TEST: ansible-lint"
+    ansible-lint $ANSIBLE_YAML_FILES ||(echo "ansible-lint syntax check was failed" && exit 2 )
+
+}
+
 function test_playbook_check(){
     echo "TEST: ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOk} ${ANSIBLE_LOG_LEVEL} --connection=local ${SUDO_OPTION} ${ANSIBLE_EXTRA_VARS} --check"
 
@@ -124,7 +132,11 @@ function extra_tests(){
     ls /etc/puppet/
 
 }
+function test_verification(){
 
+    echo "Check if log file have been created"
+    tail /root/stress-tmp/stress-ng-*log ||(echo "log files does not exist" && exit 2)
+}
 
 set -e
 function main(){
@@ -133,11 +145,13 @@ function main(){
 #    show_version
 #    tree_list
 #    test_install_requirements
+    test_ansible_lint
     test_ansible_setup
     test_playbook_syntax
     test_playbook
     test_playbook_check
 #    extra_tests
+    test_verification
 
 }
 

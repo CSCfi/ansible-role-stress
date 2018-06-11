@@ -17,3 +17,7 @@ bytes_per_vm_worker: "256M"
 
 # Temporary/runtime directory for stress-ng
 stress_tmp_dir: /root/stress-tmp
+
+# We need the ability to skip the screen test if travis run the playbook
+# multiple times
+skip_screen_check: False
