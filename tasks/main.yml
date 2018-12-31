@@ -48,6 +48,7 @@
     --vm {{vm_workers}}
     --hdd {{hdd_workers}}
     --log-file {{stress_tmp_dir}}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
+    && sleep 2
   args:
     chdir: "{{stress_tmp_dir}}"
   tags: skip_ansible_lint
