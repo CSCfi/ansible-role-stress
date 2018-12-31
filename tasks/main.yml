@@ -76,4 +76,4 @@
 - name: Fail if there are dead screens
   fail:
     msg: Found dead screens. stress-ng probably did not start. Run screen -wipe and try again.
-  when: reg_dead_screens.stdout > 0
+  when: reg_dead_screens.stdout|int > 0
