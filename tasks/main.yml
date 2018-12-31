@@ -70,6 +70,7 @@
   register: reg_dead_screens
   changed_when: False
   check_mode: False
+  failed_when: False
   tags: skip_ansible_lint
 
 - name: Fail if there are dead screens
