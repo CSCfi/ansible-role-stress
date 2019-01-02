@@ -145,13 +145,13 @@ function main(){
 #    show_version
 #    tree_list
 #    test_install_requirements
-    test_ansible_lint
     test_ansible_setup
     test_playbook_syntax
     test_playbook
     test_playbook_check
 #    extra_tests
     test_verification
+    test_ansible_lint
 
 }
 
