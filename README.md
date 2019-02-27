@@ -12,7 +12,7 @@ stress-ng running in the background.
 Requirements
 ------------
 
-  * Only tested on CentOS 7, should also work on 6, should be trivial to port for e.g. Ubuntu
+  * Only tested on CentOS 7. Should also work on Ubuntu
 
 Role variables
 --------------
@@ -25,3 +25,7 @@ Role variables
   * Variables to set how much memory and disk space to consume per worker
     * bytes_per_hdd_worker
     * bytes_per_vm_worker
+
+Notes
+----
+   * Up until version 2019-01-02 this role also supported CentOS 6. After that we no longer support that as we assume stress-ng is available in a yum repo configured on the server.

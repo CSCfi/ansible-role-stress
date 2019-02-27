@@ -11,29 +11,20 @@
     msg: A stress session is already running. It might be some pending writes to disk.
   when: screen_files.matched != 0 and not skip_screen_check
 
-- name: install dependencies for building stress-ng
-  yum: name=libattr-devel,keyutils-libs-devel,make,gcc,tar state=present
-
 - name: install screen
-  yum: name=screen state=present
-
-- name: copy and extract stress-ng tarbalil
-  unarchive: src=stress-ng-0.05.11.tar.gz dest="/root" copy=yes
-
-- name: build stress-ng
-  command: "make"
-  args:
-    chdir: '/root/stress-ng-0.05.11'
-    creates: '/root/stress-ng-0.05.11/stress-ng'
+  package:
+    name: screen
+    state: present
 
 - name: install stress-ng
-  command: "make install"
-  args:
-    chdir: '/root/stress-ng-0.05.11'
-    creates: '/usr/bin/stress-ng'
+  package:
+    name: stress-ng
+    state: present
 
 - name: create a temp dir for stress to use
-  file: path="{{ stress_tmp_dir }}" state=directory
+  file:
+    path: "{{ stress_tmp_dir }}"
+    state: directory
 
 - name: run stress-ng
   command: >
