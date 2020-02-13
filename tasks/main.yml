@@ -54,7 +54,7 @@
 - name: Fail if no stress-ng processes found
   fail:
     msg: No stress-ng processes found!
-  when: stress_procs.stdout < 1
+  when: stress_procs.stdout|int < 1
 
 - name: Get dead screen count
   shell: screen -ls|grep -c Dead
