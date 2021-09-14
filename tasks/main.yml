@@ -1,7 +1,8 @@
 ---
 - name: Register screen session
   find:
-    paths: '/var/run/screen/S-root/'
+    paths:
+      - '/var/run/screen/S-root/'
     file_type: any
     patterns: '*.stress'
   register: screen_files
@@ -21,6 +22,19 @@
     name: stress-ng
     state: present
 
+- name: install fio
+  package:
+    name: fio
+    state: present
+  when: ssd_test
+
+- name: Deploy stress_tests.sh script
+  copy:
+    src: files/stress_tests.sh
+    dest: /tmp/stress_tests.sh
+    mode: 0755
+    backup: yes
+
 - name: create a temp dir for stress to use
   file:
     path: "{{ stress_tmp_dir }}"
@@ -29,8 +43,9 @@
 - name: run stress-ng
   command: >
     screen -S stress -d -m
-    stress-ng
-    --timeout {{ test_duration }}
+    /tmp/stress_tests.sh
+    --stress-ng-duration {{ stress_ng_duration }}
+    --fio-test-duration {{ fio_test_duration }}
     --hdd-bytes {{ bytes_per_hdd_worker }}
     --vm-bytes {{ bytes_per_vm_worker }}
     --vm-method all
@@ -38,22 +53,26 @@
     --cpu {{ cpu_workers }}
     --vm {{ vm_workers }}
     --hdd {{ hdd_workers }}
+    {{ '' if ssd_test else '--no-ssd-test' }}
+    --ssd-block-size {{ ssd_block_size }}
+    --ssd-workers {{ ssd_workers }}
+    --ssd-tests-folder {{ ssd_tests_folder }}
+    --ssd-volume-group {{ ssd_volume_group }}
     --log-file {{ stress_tmp_dir }}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
-    ; sleep 2
   args:
     chdir: "{{ stress_tmp_dir }}"
   tags: skip_ansible_lint
 
-- name: Get stress-ng process count
-  shell: ps -ef|grep "[s]tress-ng"|wc -l
+- name: Get stress_tests process count
+  shell: ps -ef|grep "[s]tress_tests"|wc -l
   register: stress_procs
   changed_when: False
   check_mode: False
   tags: skip_ansible_lint
 
-- name: Fail if no stress-ng processes found
+- name: Fail if no stress_tests processes found
   fail:
-    msg: No stress-ng processes found!
+    msg: No stress_tests processes found!
   when: stress_procs.stdout|int < 1
 
 - name: Get dead screen count
@@ -66,5 +85,5 @@
 
 - name: Fail if there are dead screens
   fail:
-    msg: Found dead screens. stress-ng probably did not start. Run screen -wipe and try again.
+    msg: Found dead screens. stress_tests probably did not start. Run screen -wipe and try again.
   when: reg_dead_screens.stdout|int > 0
