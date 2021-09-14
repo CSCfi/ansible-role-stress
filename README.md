@@ -3,11 +3,12 @@
 
 Run a stress test on a machine using Ansible. This role uses
 [stress-ng](http://kernel.ubuntu.com/~cking/stress-ng/) to stress the CPU,
-memory and disk on a system. It installs stress-ng and runs it with
-configurable parameters. Since running a stress test is something that is
+memory and HDD disk(s), and [FIO](https://fio.readthedocs.io/en/latest/fio_doc.html)
+to stress SSD(s) on a system. It installs stress-ng and fio and runs it wrapped on a
+script with configurable parameters. Since running a stress test is something that is
 generally done for a long period continuously, screen is used to contain
-stress-ng so that the Ansible run finishes in a timely manner and simply leaves
-stress-ng running in the background.
+the script so that the Ansible run finishes in a timely manner and simply leaves
+the stress test running in the background.
 
 Requirements
 ------------

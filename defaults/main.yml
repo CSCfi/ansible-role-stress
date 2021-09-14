@@ -1,6 +1,26 @@
 ---
-# Test duration in seconds (defaults to 86400 which is 24h)
-test_duration: "86400"
+# Stress NG duration in seconds (defaults to 86400 which is 24h)
+stress_ng_duration: "86400"
+
+# Test SSD disks using FIO (if there are SSD disks)
+ssd_test: yes
+
+# FIO test duration
+fio_test_duration: "1h"
+
+# Size of each block for FIO's SSD test
+ssd_block_size: "4M"
+
+# Number of workers for FIO's SSD test
+ssd_workers: 64
+
+# Folder to mount a new Logical Volume in the Volume Group vg_instances and where
+# FIO would store the files for the test
+ssd_tests_folder: "/media/stress_test"
+
+# Volume Group name to test the SSDs. Check that this is contained in the SSDs
+ssd_volume_group: "vg_instances"
+
 
 # How many workers of each type to run
 # The default of zero will give as many workers as there are CPUs in the system
