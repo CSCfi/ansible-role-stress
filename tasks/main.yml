@@ -12,17 +12,17 @@
     msg: A stress session is already running. It might be some pending writes to disk.
   when: screen_files.matched != 0 and not skip_screen_check
 
-- name: install screen
+- name: Install screen
   package:
     name: screen
     state: present
 
-- name: install stress-ng
+- name: Install stress-ng
   package:
     name: stress-ng
     state: present
 
-- name: install fio
+- name: Install fio
   package:
     name: fio
     state: present
@@ -35,12 +35,12 @@
     mode: 0755
     backup: yes
 
-- name: create a temp dir for stress to use
+- name: Create a temp dir for stress to use
   file:
     path: "{{ stress_tmp_dir }}"
     state: directory
 
-- name: run stress-ng
+- name: Run stress_tests
   command: >
     screen -S stress -d -m
     /tmp/stress_tests.sh
