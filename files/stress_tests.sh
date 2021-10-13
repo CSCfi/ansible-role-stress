@@ -96,7 +96,7 @@ function run_and_log() {
   return "${return_code}"
 }
 
-log_file="${HOME}/${APP_NAME}_$(date +'%Y-%m-%d.%H.%M.%S%z').log"
+log_file="/tmp/${APP_NAME}_$(date +'%Y-%m-%d.%H.%M.%S%z').log"
 vm_method='all'
 cpu_method='all'
 ssd_block_size="4M"
