@@ -34,7 +34,7 @@ function usage() {
     [--log-file|-l 'Logs filename']"
 }
 
-function check_ssd() {
+function ssd_present() {
   # Check if all the disks are SSD (not rotational)
   result=0
   while read -r DISK
@@ -63,7 +63,7 @@ function need_fio_test() {
   fi
 
   # Check if disks are SSD (not rotational) according to the kernel
-  if check_ssd; then
+  if ssd_present; then
     message "Kernel reports SSD disks"
     return 0
   fi
