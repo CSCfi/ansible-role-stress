@@ -46,7 +46,7 @@ function ssd_present() {
 
 function need_fio_test() {
   # If there is no volume group called vg_instances don't run fio test
-  if /usr/sbin/vgdisplay vg_instances; then
+  if [ "$(/usr/sbin/vgdisplay vg_instances | grep "VG Name" | awk '{print($3)}')" == "vg_instances" ]; then
     message "There is a volume group called vg_instances"
   else
     message "There is NOT a volume group called vg_instances. Not running FIO test"
@@ -74,10 +74,12 @@ function message() {
   text="${1}"
   if [ "${text}" != "" ]; then
     current_date="$(date +'%Y-%m-%d.%H.%M.%S%z')"
-    if [ -n "${log_file}" ]; then
-      echo "${current_date} ${text}" >> "${log_file}"
+    if [ "${2}" == "show" ]; then
+      if [ -n "${log_file}" ]; then
+        echo "${current_date} ${text}" >> "${log_file}"
+      fi    
+      echo "${current_date} ${text}"
     fi
-    echo "${current_date} ${text}"
     logger -t "${APP_NAME}" "${text}"
   fi
 }
@@ -170,11 +172,11 @@ do
       ssd_tests_folder="${1}"
       if [ "${check_ssd}" == "1" ]; then
         if [ ! -d "${ssd_tests_folder}" ]; then
-          message "Error! The SSD tests folder is not a directory."
+          message "Error! The SSD tests folder is not a directory." show
           exit 1
         fi
         if [ ! -w "${ssd_tests_folder}" ]; then
-          message "Error! The SSD tests folder is not writable."
+          message "Error! The SSD tests folder is not writable." show
           exit 2
         fi
       fi
@@ -185,7 +187,7 @@ do
       ssd_volume_group="${1}"
       if [ "${check_ssd}" == "1" ]; then
         if [ "$(lvdisplay vg_instances | grep 'LV Name' | awk '{print($3)}' | grep 'instance_pool')" != "instance_pool" ]; then
-          message "Error! The Volume Group '${ssd_volume_group}' does NOT exists or does NOT contain a Logical Volume called 'instance_pool'."
+          message "Error! The Volume Group '${ssd_volume_group}' does NOT exists or does NOT contain a Logical Volume called 'instance_pool'." show
           exit 3
         fi
       fi
@@ -207,11 +209,13 @@ do
       shift
       ;;
     *)
-      message "Warning! Ignoring unknwon parameter '${1}'"
+      message "Warning! Ignoring unknwon parameter '${1}'" show
       shift
       ;;
   esac
 done
+
+message "Check syslog '${APP_NAME}' for detailed output." show
 
 # If all disks are SSD, then run the FIO tests
 if [ "${check_ssd}" == "1" ]; then
@@ -250,11 +254,11 @@ if [ "${check_ssd}" == "1" ]; then
     --output=/tmp/fiowrite.out \
     --runtime="${fio_stress_ng_duration}" \
     --time_based
-  return_code=${?}
-  if [ "${return_code}" == "0" ]; then
-    message "FIO finished without errors."
+  fio_return_code=${?}
+  if [ "${fio_return_code}" == "0" ]; then
+    message "FIO finished without errors." show
   else
-    message "Error ${return_code} running FIO. See output after this message."
+    message "Error ${fio_return_code} running FIO. See output after this message in syslog." show
   fi
   run_and_log cat /tmp/fiowrite.out
   
@@ -277,5 +281,11 @@ run_and_log stress-ng \
     --vm "${vm_workers}" \
     --hdd "${hdd_workers}" \
     --log-file "${temp_log_file}"
+return_code=${?}
+if [ "${return_code}" == "0" ]; then
+  message "Stress-NG finished without errors." show
+else
+  message "Error ${return_code} running Stress-NG. See output after this message in syslog." show
+fi
 run_and_log cat "${temp_log_file}"
 sleep 2
