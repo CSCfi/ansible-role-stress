@@ -18,14 +18,21 @@ Requirements
 Role variables
 --------------
 
-  * test_duration: sets the timeout limit for stress-ng in seconds
+  * stress_ng_duration: sets the timeout limit for stress-ng in seconds
   * Variables to set the number of each type of worker:
     * cpu_workers
     * vm_workers
     * hdd_workers
-  * Variables to set how much memory and disk space to consume per worker
+  * Variables to set how much memory and disk space to consume per worker:
     * bytes_per_hdd_worker
     * bytes_per_vm_worker
+  * Variables to set how the SSD test (FIO) is done:
+    * ssd_test: Test SSD disks using FIO (if there are SSD disks)
+    * fio_test_duration: sets the timeout limit for fio test in seconds
+    * ssd_block_size: Size of each block for FIO's SSD test
+    * ssd_workers: Number of workers for FIO's SSD test
+    * ssd_tests_folder: Folder to mount a new Logical Volume in the Volume Group vg_instances and where FIO would store the files for the test
+    * ssd_volume_group: Volume Group name to test the SSDs. Check that this is contained in the SSDs
 
 Notes
 ----
