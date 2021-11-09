@@ -16,7 +16,7 @@ RUN yum clean all && \
 
 RUN mkdir /etc/ansible/
 RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
-RUN pip install -U 'pip<10' 'setuptools<45' ruamel.yaml.clib==0.2.2
+RUN pip install -U 'pip<10' 'setuptools<45' ruamel.yaml==0.16.3 ruamel.yaml.clib==0.2.2
 RUN pip install ansible ansible-lint
 
 CMD ["/bin/bash"]
