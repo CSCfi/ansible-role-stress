@@ -16,7 +16,7 @@ RUN yum clean all && \
 
 RUN mkdir /etc/ansible/
 RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
-RUN pip install -U pip
+RUN pip install setuptools-scm==5.0.2
 RUN pip install ansible ansible-lint
 
 CMD ["/bin/bash"]
