@@ -25,7 +25,6 @@
   file:
     path: "{{ stress_tmp_dir }}"
     state: directory
-    mode: 0755
 
 - name: run stress-ng
   command: >
