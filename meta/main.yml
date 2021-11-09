@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: ansible_role_stress
   author: Risto Laurikainen
   description: Runs a stress test on a server
   company: CSC
