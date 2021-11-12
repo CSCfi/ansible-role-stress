@@ -3,7 +3,8 @@
  - name: Playbook for CI testing.
    hosts: localhost
    vars:
-       - test_duration: "5"
+       - stress_ng_duration: "5"
+       - fio_test_duration: "1"
        - skip_screen_check: True
 
    roles:
