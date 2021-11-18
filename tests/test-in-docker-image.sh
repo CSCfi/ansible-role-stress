@@ -81,6 +81,19 @@ function tree_list() {
 tree
 
 }
+
+function prepare_for_fio_test() {
+    yum -y install lmv2 parted kpartx
+    dd if=/dev/zero bs=1M count=1024 > disk.img
+    parted -s -a opt disk.img mktable msdos
+    parted -s -a opt disk.img mkpart primary xfs 0% 100%
+    kpartx -av disk.img
+    pvcreate /dev/mapper/loop0p1
+    vgcreate vg_instances
+    sed -c -i "s/\(udev_rules *= *\).*/\10/" /etc/lvm/lvm.conf
+    lvcreate --type thin-pool --name instance_pool --size 1000M vg_instances
+}
+
 function test_ansible_setup(){
     echo "TEST: ansible -m setup -i ${ANSIBLE_INVENTORY} --connection=local localhost"
 
