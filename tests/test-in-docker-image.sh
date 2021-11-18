@@ -148,10 +148,10 @@ function main(){
     test_ansible_setup
     test_playbook_syntax
 # /media/stress_test should not exists before running ansible
-    test ! -d "/media/stress_test"
+    test ! -d "/media/stress_test" || (echo "Failure: /media/stress_test exists before running ansible playbook" && exit 1)
     test_playbook
 # /media/stress_test should exists after running ansible
-    test -d "/media/stress_test"
+    test -d "/media/stress_test" || (echo "Failure: /media/stress_test does not exist after running ansible playbook" && exit 1)
     test_fio_folder_presence
     test_playbook_check
 #    extra_tests
