@@ -88,10 +88,10 @@ function prepare_for_fio_test() {
     parted -s -a opt disk.img mktable msdos
     parted -s -a opt disk.img mkpart primary xfs 0% 100%
     kpartx -av disk.img
-    pvcreate /dev/mapper/loop0p1
-    vgcreate vg_instances /dev/mapper/loop0p1
+    LOOPDEV=$(kpartx -l disk.img | awk '{print($1)}')
+    pvcreate /dev/mapper/$LOOPDEV
+    vgcreate vg_instances /dev/mapper/$LOOPDEV
     sed -c -i "s/\(udev_rules *= *\).*/\10/" /etc/lvm/lvm.conf
-    cat /etc/lvm/lvm.conf | grep udev_rules
     lvcreate -vvvvvvv --type thin-pool --name instance_pool --size 1000M vg_instances 2>&1
 }
 
