@@ -92,7 +92,7 @@ function prepare_for_fio_test() {
     pvcreate /dev/mapper/$LOOPDEV
     vgcreate vg_instances /dev/mapper/$LOOPDEV
     sed -c -i "s/\(udev_rules *= *\).*/\10/" /etc/lvm/lvm.conf
-    lvcreate -vvvvvvv --type thin-pool --name instance_pool --size 1000M vg_instances 2>&1
+    lvcreate -vvvvvvv --type thin-pool --name instance_pool --size 1000M vg_instances
 }
 
 function test_ansible_setup(){
