@@ -1,7 +1,7 @@
 language: python
 
 sudo: required
-dist: focal
+dist: bionic
 group: edge
 
 services:
