@@ -89,7 +89,7 @@ function prepare_for_fio_test() {
     parted -s -a opt disk.img mkpart primary xfs 0% 100%
     kpartx -av disk.img
     pvcreate /dev/mapper/loop0p1
-    vgcreate vg_instances
+    vgcreate vg_instances /dev/mapper/loop0p1
     sed -c -i "s/\(udev_rules *= *\).*/\10/" /etc/lvm/lvm.conf
     lvcreate --type thin-pool --name instance_pool --size 1000M vg_instances
 }
