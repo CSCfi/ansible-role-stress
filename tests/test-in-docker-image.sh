@@ -152,7 +152,6 @@ function main(){
     test_playbook
 # /media/stress_test should exists after running ansible
     test -d "/media/stress_test" || (echo "Failure: /media/stress_test does not exist after running ansible playbook" && exit 1)
-    test_fio_folder_presence
     test_playbook_check
 #    extra_tests
     test_verification
