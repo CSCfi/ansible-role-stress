@@ -83,7 +83,7 @@ tree
 }
 
 function prepare_for_fio_test() {
-    yum -y install lmv2 parted kpartx
+    yum -y install lvm2 parted kpartx
     dd if=/dev/zero bs=1M count=1024 > disk.img
     parted -s -a opt disk.img mktable msdos
     parted -s -a opt disk.img mkpart primary xfs 0% 100%
