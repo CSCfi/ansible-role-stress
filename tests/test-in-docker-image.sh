@@ -158,6 +158,7 @@ function main(){
 #    show_version
 #    tree_list
 #    test_install_requirements
+    prepare_for_fio_test
     test_ansible_setup
     test_playbook_syntax
     test_playbook
