@@ -40,6 +40,11 @@
     path: "{{ stress_tmp_dir }}"
     state: directory
 
+- name: Create a dir for fio stress testing
+  file:
+    path: "{{ ssd_tests_folder }}"
+    state: directory
+
 - name: Run stress_tests
   command: >
     screen -S stress -d -m
