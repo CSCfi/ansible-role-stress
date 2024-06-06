@@ -77,7 +77,25 @@
 
 - name: Fail if no stress_tests processes found
   fail:
-    msg: No stress_tests processes found!
+    msg: |
+      No stress_tests processes found!
+      Command should have been: screen -S stress -d -m
+      /tmp/stress_tests.sh
+      --stress-ng-duration {{ stress_ng_duration }}
+      --fio-test-duration {{ fio_test_duration }}
+      --hdd-bytes {{ bytes_per_hdd_worker }}
+      --vm-bytes {{ bytes_per_vm_worker }}
+      --vm-method all
+      --cpu-method all
+      --cpu {{ cpu_workers }}
+      --vm {{ vm_workers }}
+      --hdd {{ hdd_workers }}
+      {{ '' if ssd_test else '--no-ssd-test' }}
+      --ssd-block-size {{ ssd_block_size }}
+      --ssd-workers {{ ssd_workers }}
+      --ssd-tests-folder {{ ssd_tests_folder }}
+      --ssd-volume-group {{ ssd_volume_group }}
+      --log-file {{ stress_tmp_dir }}/stress-ng-{{ ansible_date_time.iso8601_basic_short }}.log
   when: stress_procs.stdout|int < 1
 
 - name: Get dead screen count
