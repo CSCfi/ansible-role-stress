@@ -19,7 +19,7 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
 
 RUN mkdir /etc/ansible/
 RUN echo -e '[local]\nlocalhost' > /etc/ansible/hosts
-RUN pip install -U 'pip<21.0'
+RUN pip install -U 'pip'
 RUN pip install 'ansible<2.10' ansible-lint
 
 CMD ["/bin/bash"]
